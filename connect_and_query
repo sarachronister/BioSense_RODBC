@@ -1,0 +1,10 @@
+NSSP <- odbcConnect("BioSense_Platform", rawToChar(username), rawToChar(password))
+
+# SQL query in quotes here, you can use the paste() function if you're including variables like dates that will change
+# Refer to the Datacamp SQL training for info on how to write a SQL query
+my_query <- "select * from XY_Table" 
+
+# Key in this function is to set stringAsFactors to FALSE and as.is to TRUE so the data will import as expected
+df_files <- sqlQuery(NSSP, my_queryPR, stringsAsFactors = FALSE, as.is = TRUE)
+
+odbcCloseAll()
