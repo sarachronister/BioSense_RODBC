@@ -1,0 +1,33 @@
+#######################
+
+## Formatting your dates
+arrived_earliest_date <- "2019-03-01"           
+arrived_latest_date <- Sys.Date()+1   
+arrived_earliest_date_no_dash <- paste0("'", gsub("-", "", arrived_earliest_date), "'")
+arrived_latest_date_no_dash <- paste0("'", gsub("-", "", arrived_latest_date), "'")
+
+#######################
+
+## Selecting a few variables from a single table
+my_query <- paste("select Message_ID, Sending_Facility_ID, First_Patient_ID_Assigning_Facility, Arrived_Date_Time, Treating_Facility_ID, C_Patient_Class from XY_PR_Processed", 
+                  "where cast(Arrived_Date_Time as date) between", 
+                  arrived_earliest_date_no_dash, "and", arrived_latest_date_no_dash)                    
+#######################
+
+## Selecting everything (from the MFT, for example)
+my_query <- "select * from XY_MFT"
+
+#######################
+
+## Selecting specific elements in each table, not everything
+## Inner join in SQL (try to do as much processing in the database as you can to lighten the load on your processing in R)
+my_query <- paste("select 
+                  # Preface each variable with an alias of the table name
+                  Raw.File_Name, Raw.Arrived_Date_Time, Pro.Recorded_Date_Time, Pro.Sending_Facility_ID, Pro.Visit_ID, Pro.Trigger_Event, Pro.C_Biosense_Facility_ID, Pro.C_Visit_Date",  
+                  # Tell it which table refers to each alias
+                  "from XY_PR_Raw as Raw inner join XY_PR_Processed as Pro",
+                  # Tell it which variables to join on
+                  "on Raw.Message_ID = Pro.Message_ID",
+                  # Drop in the objects specifying your date range
+                  "where cast(Raw.Arrived_Date_Time as date) between", arrived_earliest_date_no_dash, "and", arrived_latest_date_no_dash)
+
