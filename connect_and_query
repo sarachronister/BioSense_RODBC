@@ -5,6 +5,6 @@ NSSP <- odbcConnect("BioSense_Platform", rawToChar(username), rawToChar(password
 my_query <- "select * from XY_Table" 
 
 # Key in this function is to set stringAsFactors to FALSE and as.is to TRUE so the data will import as expected
-df_files <- sqlQuery(NSSP, my_queryPR, stringsAsFactors = FALSE, as.is = TRUE)
+df_files <- sqlQuery(NSSP, my_query, stringsAsFactors = FALSE, as.is = TRUE)
 
 odbcCloseAll()
